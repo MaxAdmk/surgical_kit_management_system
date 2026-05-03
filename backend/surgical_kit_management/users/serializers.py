@@ -9,7 +9,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'name', 'password', 'role', 'hospital_id')
+        fields = ('id', 'email', 'name', 'password', 'role')
 
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
@@ -45,7 +45,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             password=validated_data['password'],
             name=validated_data.get('name', ''),
-            role=validated_data.get('role', 'nurse'),
-            hospital_id=validated_data.get('hospital_id')
+            role=validated_data.get('role', 'nurse')
         )
         return user

@@ -20,6 +20,8 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
+    """Custom user model for healthcare staff."""
+    
     ROLE_CHOICES = (
         ('doctor', 'Doctor'),
         ('nurse', 'Nurse'),
@@ -29,8 +31,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
-    
-    hospital_id = models.IntegerField(null=True, blank=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -39,6 +39,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'role']
+
+    def __str__(self):
+        return f"{self.name} ({self.role})"
 
     def __str__(self):
         return f"{self.name} ({self.role})"

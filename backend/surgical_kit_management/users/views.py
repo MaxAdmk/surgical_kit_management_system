@@ -1,6 +1,6 @@
 from rest_framework import generics, status, views
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.conf import settings
 from django.middleware.csrf import get_token
@@ -158,3 +158,21 @@ class LogoutView(views.APIView):
                 {'error': 'Logout failed'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
+class UserProfileView(views.APIView):
+    """Get current user profile"""
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        """Return current user's profile including role"""
+        user = request.user
+        return Response(
+            {
+                'id': user.id,
+                'email': user.email,
+                'name': user.name,
+                'role': user.role,
+            },
+            status=status.HTTP_200_OK
+        )

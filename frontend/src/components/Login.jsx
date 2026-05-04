@@ -1,10 +1,12 @@
 // src/components/Login.jsx
 import React, { useState } from 'react';
-import { loginUser } from '../api';
+import { useNavigate } from 'react-router-dom';
+import { loginUser, getCurrentUser } from '../api';
 import { validateLoginForm } from '../utils/validation';
 import '../styles/Auth.css';
 
-const Login = ({ onSwitchToRegister }) => {
+const Login = ({ onLoginSuccess }) => {
+    const navigate = useNavigate();
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -36,9 +38,22 @@ const Login = ({ onSwitchToRegister }) => {
         try {
             await loginUser(credentials);
             setSuccess('✓ Successfully signed in! Redirecting...');
-            setTimeout(() => {
-                // TODO: Implement dashboard redirect
-            }, 2000);
+            
+            // Get user profile to determine role
+            setTimeout(async () => {
+                try {
+                    const user = await getCurrentUser();
+                    // Store user data in localStorage for persistence
+                    localStorage.setItem('user', JSON.stringify(user));
+                    if (onLoginSuccess) {
+                        onLoginSuccess(user.role);
+                    }
+                } catch (profileError) {
+                    console.error('Failed to fetch user profile:', profileError);
+                    setError('Failed to load user profile. Please try again.');
+                    localStorage.removeItem('user');
+                }
+            }, 1000);
             
         } catch (err) {
             setError(err.message || 'Sign in error. Please check your credentials.');
@@ -104,7 +119,7 @@ const Login = ({ onSwitchToRegister }) => {
 
                 <div className="form-footer">
                     <span>Don't have an account?</span>
-                    <a onClick={onSwitchToRegister}>Register</a>
+                    <a onClick={() => navigate('/register')} style={{ cursor: 'pointer' }}>Register</a>
                 </div>
             </div>
 

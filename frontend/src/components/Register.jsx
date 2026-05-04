@@ -1,16 +1,17 @@
 // src/components/Register.jsx
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../api';
 import { validateRegistrationForm, getPasswordStrengthLabel } from '../utils/validation';
 import '../styles/Auth.css';
 
-const Register = ({ onSwitchToLogin }) => {
+const Register = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: '',
         name: '',
         password: '',
-        role: 'nurse',
-        hospital_id: 1
+        role: 'nurse'
     });
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
@@ -58,13 +59,12 @@ const Register = ({ onSwitchToLogin }) => {
                 email: '',
                 name: '',
                 password: '',
-                role: 'nurse',
-                hospital_id: 1
+                role: 'nurse'
             });
             setPasswordStrength(0);
 
             setTimeout(() => {
-                onSwitchToLogin();
+                navigate('/');
             }, 2000);
         } catch (error) {
             setError('❌ Registration error. Please check your data and try again.');
@@ -144,34 +144,19 @@ const Register = ({ onSwitchToLogin }) => {
                         )}
                     </div>
 
-                    <div className="form-group-half">
-                        <div className="form-group">
-                            <label className="form-label">Position</label>
-                            <select
-                                className="form-select"
-                                name="role"
-                                value={formData.role}
-                                onChange={handleChange}
-                                disabled={isLoading}
-                            >
-                                <option value="nurse">👩‍⚕️ Nurse</option>
-                                <option value="doctor">👨‍⚕️ Doctor</option>
-                                <option value="admin">👤 Administrator</option>
-                            </select>
-                        </div>
-
-                        <div className="form-group">
-                            <label className="form-label">Hospital ID</label>
-                            <input
-                                className="form-input"
-                                type="number"
-                                name="hospital_id"
-                                placeholder="1"
-                                value={formData.hospital_id}
-                                onChange={handleChange}
-                                disabled={isLoading}
-                            />
-                        </div>
+                    <div className="form-group">
+                        <label className="form-label">Position</label>
+                        <select
+                            className="form-select"
+                            name="role"
+                            value={formData.role}
+                            onChange={handleChange}
+                            disabled={isLoading}
+                        >
+                            <option value="nurse">👩‍⚕️ Nurse</option>
+                            <option value="doctor">👨‍⚕️ Doctor</option>
+                            <option value="admin">👤 Administrator</option>
+                        </select>
                     </div>
 
                     <button 
@@ -185,7 +170,7 @@ const Register = ({ onSwitchToLogin }) => {
 
                 <div className="form-footer">
                     <span>Already have an account?</span>
-                    <a onClick={onSwitchToLogin}>Sign In</a>
+                    <a onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>Sign In</a>
                 </div>
             </div>
 

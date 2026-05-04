@@ -59,6 +59,7 @@
   border: 2px solid #ecf0f1;
   border-radius: 8px;
   font-size: 14px;
+  color: black;
   background: #f8f9fa;
   transition: all 0.3s ease;
 }
@@ -96,6 +97,7 @@
   border-radius: 8px;
   font-size: 14px;
   background: #f8f9fa;
+  color: black;
   cursor: pointer;
   transition: all 0.3s ease;
   appearance: none;
@@ -290,7 +292,7 @@
 }
 
 .kit-card-instruments-count::after {
-  content: " инструментов";
+  content: " Instruments";
   font-size: 12px;
   font-weight: 500;
   color: #7f8c8d;
